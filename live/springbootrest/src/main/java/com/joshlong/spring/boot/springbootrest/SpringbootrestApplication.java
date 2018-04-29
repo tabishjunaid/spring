@@ -7,11 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 public class SpringbootrestApplication {
@@ -35,6 +38,23 @@ public class SpringbootrestApplication {
 	}
 }
 
+@RestController
+class ReservationController{
+	
+	@RequestMapping("/reservations")
+	Collection<Reservation> reservations(){
+		return this.reservationRepo.findAll();
+	}
+	
+	@RequestMapping("/hello")
+	String hello() {
+		return "hello";
+	}
+	
+	@Autowired
+	private ReservationRepository reservationRepo; 
+}
+
 interface ReservationRepository extends JpaRepository<Reservation, Long>{
 	Collection<Reservation> findByReservationName(String reservationName);
 }
@@ -49,20 +69,16 @@ class Reservation{
 	private String reservationName;
 
 	public Reservation() {
-		super();
+	
 	}
 
 	public Reservation(String reservationName) {
-		super();
 		this.reservationName = reservationName;
 	}
 
 	@Override
 	public String toString() {
 		return "Reservation [id=" + id + ", reservationName=" + reservationName + "]";
-	}
-	
-	
-	
+	}	
 	
 }
